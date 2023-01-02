@@ -2,6 +2,7 @@ import React from "react";
 import { RouterProvider } from "react-router-dom";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 import reset from "styled-reset";
+import ToDoList from "./ToDoList";
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
@@ -25,6 +26,7 @@ const App = () => {
   return (
     <>
       <GlobalStyle />
+      <ToDoList />
     </>
   );
 };
