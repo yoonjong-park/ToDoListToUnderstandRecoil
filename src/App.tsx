@@ -24,10 +24,7 @@ const GlobalStyle = createGlobalStyle`
 const App = () => {
   return (
     <>
-      {/* <ThemeProvider theme={isDark ? darkTheme : lightTheme}> */}
       <GlobalStyle />
-      {/* <RouterProvider router={router}></RouterProvider> */}
-      {/* </ThemeProvider> */}
     </>
   );
 };
