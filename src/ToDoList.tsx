@@ -32,17 +32,43 @@ import { useForm } from "react-hook-form";
 }; */
 
 const ToDoList = () => {
-  const { register, watch } = useForm();
-  console.log(watch());
+  const { register, handleSubmit, formState } = useForm();
+  const onValid = (data: any) => {
+    console.log("data", data);
+  };
+  console.log("formState", formState.errors);
   return (
     <div>
-      <form>
-        <input {...register("Email")} placeholder="Email" />
-        <input {...register("FirstName")} placeholder="First Name" />
-        <input {...register("LastName")} placeholder="Last Name" />
-        <input {...register("Username")} placeholder="Username" />
-        <input {...register("Password")} placeholder="Password" />
-        <button>add</button>
+      {/* // 모든 Validation을 마친 호출한 이후에, onValid를 실행하게 됨 */}
+      <form
+        style={{ display: "flex", flexDirection: "column" }}
+        onSubmit={handleSubmit(onValid)}>
+        <input
+          {...register("Email", { required: true })}
+          //  required 를 직접 사용하지 않는 이유 : User의 조작을 방지하기 위함
+          placeholder="Email"
+        />
+        <input
+          {...register("FirstName", { required: true })}
+          placeholder="First Name"
+        />
+        <input
+          {...register("LastName", { required: true })}
+          placeholder="Last Name"
+        />
+        <input
+          {...register("Username", {
+            required: "작성해주세요.",
+            minLength: { value: 5, message: "5자 이상 적어주세요." },
+          })}
+          placeholder="Username"
+        />
+        {formState.errors.Username && <>{formState.errors.Username.message}</>}
+        <input
+          {...register("Password", { required: true, minLength: 5 })}
+          placeholder="Password"
+        />
+        <button>Add</button>
       </form>
     </div>
   );
