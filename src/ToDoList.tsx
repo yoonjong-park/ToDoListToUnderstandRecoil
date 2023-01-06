@@ -31,44 +31,86 @@ import { useForm } from "react-hook-form";
   );
 }; */
 
+interface IForm {
+  email: string;
+  firstName: string;
+  lastName: string;
+  username: string;
+  password: string;
+  password1: string;
+}
+
 const ToDoList = () => {
-  const { register, handleSubmit, formState } = useForm();
-  const onValid = (data: any) => {
-    console.log("data", data);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+  } = useForm<IForm>({ defaultValues: { email: "@naver.com" } });
+  console.log("errors", errors);
+  const onValid = (data: IForm) => {
+    console.log("errors", errors);
+    if (data.password !== data.password1) {
+      setError("password1", { message: "password와 다릅니다." });
+    }
   };
-  console.log("formState", formState.errors);
+
   return (
     <div>
       {/* // 모든 Validation을 마친 호출한 이후에, onValid를 실행하게 됨 */}
       <form
-        style={{ display: "flex", flexDirection: "column" }}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+        }}
         onSubmit={handleSubmit(onValid)}>
         <input
-          {...register("Email", { required: true })}
+          {...register("email", {
+            required: "입력은 필수",
+            pattern: {
+              value: /^[A-Za-z0-9._%+-]+@naver.com/,
+              message: "네이버 메일만 가입이 가능합니다.",
+            },
+          })}
           //  required 를 직접 사용하지 않는 이유 : User의 조작을 방지하기 위함
           placeholder="Email"
         />
+        <>{errors?.email?.message}</>
         <input
-          {...register("FirstName", { required: true })}
+          {...register("firstName", { required: "입력은 필수" })}
           placeholder="First Name"
         />
+        <>{errors?.firstName?.message}</>
         <input
-          {...register("LastName", { required: true })}
+          {...register("lastName", { required: "입력은 필수" })}
           placeholder="Last Name"
         />
+        <>{errors?.lastName?.message}</>
         <input
-          {...register("Username", {
-            required: "작성해주세요.",
+          {...register("username", {
+            required: "입력은 필수",
             minLength: { value: 5, message: "5자 이상 적어주세요." },
           })}
           placeholder="Username"
         />
-        {formState.errors.Username && <>{formState.errors.Username.message}</>}
+        <>{errors?.username?.message}</>
         <input
-          {...register("Password", { required: true, minLength: 5 })}
+          {...register("password", {
+            required: "입력은 필수",
+            minLength: { value: 5, message: "5자 이상 적어주세요." },
+          })}
           placeholder="Password"
         />
-        <button>Add</button>
+        <>{errors?.password?.message}</>
+        <input
+          {...register("password1", {
+            required: "입력은 필수",
+            minLength: { value: 5, message: "5자 이상 적어주세요." },
+          })}
+          placeholder="Password Confirm"
+        />
+        <>{errors?.password1?.message}</>
+        <button>저장</button>
       </form>
     </div>
   );
