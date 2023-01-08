@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 
 /* const ToDoList = () => {
@@ -38,6 +38,7 @@ interface IForm {
   username: string;
   password: string;
   password1: string;
+  extraError?: string;
 }
 
 const ToDoList = () => {
@@ -48,11 +49,20 @@ const ToDoList = () => {
     setError,
   } = useForm<IForm>({ defaultValues: { email: "@naver.com" } });
   console.log("errors", errors);
-  const onValid = (data: IForm) => {
-    console.log("errors", errors);
+
+  const handleValid = (data: IForm) => {
     if (data.password !== data.password1) {
-      setError("password1", { message: "password와 다릅니다." });
+      setError(
+        "password1",
+        { message: "password와 다릅니다." },
+        { shouldFocus: true }
+      );
+      // 에러가 있는 input 으로 focus 해주는 점이 좋음.
     }
+    // setError("extraError", { message: "Server offline" });
+    console.log("errors", errors);
+    console.log("data", data);
+    //
   };
 
   return (
@@ -63,7 +73,7 @@ const ToDoList = () => {
           display: "flex",
           flexDirection: "column",
         }}
-        onSubmit={handleSubmit(onValid)}>
+        onSubmit={handleSubmit(handleValid)}>
         <input
           {...register("email", {
             required: "입력은 필수",
@@ -75,17 +85,27 @@ const ToDoList = () => {
           //  required 를 직접 사용하지 않는 이유 : User의 조작을 방지하기 위함
           placeholder="Email"
         />
-        <>{errors?.email?.message}</>
+        <>{errors.email?.message}</>
         <input
-          {...register("firstName", { required: "입력은 필수" })}
+          {...register("firstName", {
+            required: "입력은 필수",
+            validate: {
+              noHacker: value =>
+                value.includes("hacker") ? "해커. 잘가요" : true,
+              noDicker: value =>
+                value.includes("dicker") ? "고추. 잘가요" : true,
+              // return string은 error message를 전달
+              // 여러 개 등록하는 것도 가능
+            },
+          })}
           placeholder="First Name"
         />
-        <>{errors?.firstName?.message}</>
+        <>{errors.firstName?.message}</>
         <input
           {...register("lastName", { required: "입력은 필수" })}
           placeholder="Last Name"
         />
-        <>{errors?.lastName?.message}</>
+        <>{errors.lastName?.message}</>
         <input
           {...register("username", {
             required: "입력은 필수",
@@ -93,7 +113,7 @@ const ToDoList = () => {
           })}
           placeholder="Username"
         />
-        <>{errors?.username?.message}</>
+        <>{errors.username?.message}</>
         <input
           {...register("password", {
             required: "입력은 필수",
@@ -101,7 +121,7 @@ const ToDoList = () => {
           })}
           placeholder="Password"
         />
-        <>{errors?.password?.message}</>
+        <>{errors.password?.message}</>
         <input
           {...register("password1", {
             required: "입력은 필수",
@@ -109,8 +129,9 @@ const ToDoList = () => {
           })}
           placeholder="Password Confirm"
         />
-        <>{errors?.password1?.message}</>
+        <>{errors.password1?.message}</>
         <button>저장</button>
+        <>{errors.extraError?.message}</>
       </form>
     </div>
   );
