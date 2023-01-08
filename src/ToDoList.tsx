@@ -1,5 +1,20 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import { atom, useRecoilState } from "recoil";
+
+interface IForm {
+  toDo: string;
+}
+
+interface IToDo {
+  text: string;
+  category: "TO_DO" | "DOING" | "DONE";
+}
+
+const toDoState = atom<IToDo[]>({
+  key: "toDo",
+  default: [],
+});
 
 /* const ToDoList = () => {
   const [toDo, setTodo] = useState("");
@@ -31,23 +46,19 @@ import { useForm } from "react-hook-form";
   );
 }; */
 
-interface IForm {
-  toDo: string;
-}
-
 const ToDoList = () => {
-  const {
-    setValue,
-    register,
-    handleSubmit,
-    formState: { errors },
-    setError,
-  } = useForm<IForm>();
+  const [toDos, setToDos] = useRecoilState(toDoState);
 
-  const handleValid = (data: IForm) => {
-    console.log("data.toDo", data.toDo);
+  const { setValue, register, handleSubmit } = useForm<IForm>();
+
+  const handleValid = ({ toDo }: IForm) => {
+    console.log("data.toDo", toDo);
+    setToDos(oldToDos => [{ text: toDo, category: "TO_DO" }, ...oldToDos]);
     setValue("toDo", "");
+    // toDos.push();
   };
+
+  console.log("toDos", toDos);
 
   return (
     <div>
