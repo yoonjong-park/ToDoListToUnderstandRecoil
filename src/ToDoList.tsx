@@ -13,7 +13,6 @@ const ToDoList = () => {
       <hr />
       <CreateToDo />
       {toDos.map((toDo, i) => {
-        console.log("...todo", <Todo key={i} {...toDo} />);
         return <Todo key={toDo.id} {...toDo} />;
       })}
     </div>
