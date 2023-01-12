@@ -1,11 +1,14 @@
 import React from "react";
 import { useRecoilValue } from "recoil";
-import { toDoState } from "./atoms";
+import { toDoState, toDoSelector } from "./atoms";
 import CreateToDo from "./components/CreateToDo";
 import Todo from "./components/Todo";
 
 const ToDoList = () => {
   const toDos = useRecoilValue(toDoState);
+  const selectorOutput = useRecoilValue(toDoSelector);
+  console.log(selectorOutput);
+
   return (
     <div>
       {/* // 모든 Validation을 마친 호출한 이후에, onValid를 실행하게 됨 */}
