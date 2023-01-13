@@ -20,18 +20,16 @@ const ToDoList = () => {
       {/* // 모든 Validation을 마친 호출한 이후에, onValid를 실행하게 됨 */}
       <h1>To Dos</h1>
       <hr />
-      <CreateToDo />
-
       <select onInput={onInput}>
         <option value="TO_DO">To Do</option>
         <option value="DOING">Doing</option>
         <option value="DONE">Done</option>
       </select>
+      <CreateToDo />
 
-      {toDos &&
-        toDos.map(toDo => {
-          return <Todo key={toDo.id} {...toDo} />;
-        })}
+      {toDos?.map(toDo => {
+        return <Todo key={toDo.id} {...toDo} />;
+      })}
       {/* <h2>To Do</h2>
       {toDo.map((toDo, i) => {
         return <Todo key={toDo.id} {...toDo} />;
